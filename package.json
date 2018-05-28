@@ -1,0 +1,10 @@
+{
+  "devDependencies": {
+    "@types/angular": "^1.6.45",
+    "@types/d3": "^5.0.0",
+    "@types/mapbox-gl": "^0.44.3"
+  },
+  "dependencies": {
+    "@deck.gl/core": "^5.2.2"
+  }
+}

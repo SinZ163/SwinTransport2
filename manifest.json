@@ -1,0 +1,8 @@
+{
+  "name": "SwinTransport2",
+  "short_name": "SwinTransport2",
+  "start_url": ".",
+  "display": "fullscreen",
+  "background_color": "#000",
+  "description": "A Public Transport map for Victoria"
+}

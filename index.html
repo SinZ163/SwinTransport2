@@ -1,0 +1,89 @@
+<html ng-app="SwinTransport2">
+    <head>
+        <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+        <link rel="manifest" href="manifest.json">
+
+        <script src="https://d3js.org/d3.v5.min.js" defer="defer"></script>
+
+        <!-- Deck GL -->
+        <script src="https://unpkg.com/deck.gl@latest/deckgl.min.js" defer="defer"></script>
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js' defer="defer"></script>
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
+        <!-- End Deck GL-->
+        <!-- Angular JS-->
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js" defer="defer"></script>
+        <script src="https://code.angularjs.org/1.6.9/angular-route.js" defer="defer"></script>
+        <!-- End Angular JS-->
+
+        <!-- Start Self -->
+        <script src='js/main.js' defer="defer"></script>
+        <script src='js/SwinTransport2.module.js' defer="defer"></script>
+        <script src='js/testController.controller.js' defer="defer"></script>
+        <!-- End Self-->
+        <style>
+            body { margin:0; padding:0; }
+            #map { position:absolute; top:0; bottom:0; width:100%; }
+            #test {
+                position: absolute;
+                top: 50px;
+                left: 50px;
+                width: 200px;
+                height: 200px;
+                background-color: white;
+                border-radius: 20px;
+                z-index: 3;
+            }
+            #test label {
+                margin-left: 30px;
+            }
+
+            /**
+             * Huge hack to make android chrome behave
+            **/
+            .body,
+            .wrapper {
+            /* Break the flow */
+            position: absolute;
+            top: 0px;
+
+            /* Give them all the available space */
+            width: 100%;
+            height: 100%;
+
+            /* Remove the margins if any */
+            margin: 0;
+
+            /* Allow them to scroll down the document */
+            overflow-y: hidden;
+            }
+
+            .body {
+            /* Sending body at the bottom of the stack */
+            z-index: 1;
+            }
+
+            .wrapper {
+            /* Making the wrapper stack above the body */
+            z-index: 2;
+            }
+        </style>
+    </head>
+    </head>
+    <body class="body">
+        <div class="wrapper">
+            <div id="map"></div>
+            <div id="test" ng-controller="testController">
+                <label for="network1">Regional Train</label><input id="network1" ng-model="networks.network1.showIcons" type="checkbox" /><br />
+                <label for="network2">Metropolitan Train</label><input id="network2" ng-model="networks.network2.showIcons" type="checkbox" /><br />
+                <label for="network3">Metropolitan Tram</label><input id="network3" ng-model="networks.network3.showIcons" type="checkbox" /><br />
+                <label for="network4">Metropolitan Bus</label><input id="network4" ng-model="networks.network4.showIcons" type="checkbox" /><br />
+                <label for="network5">Regional Coach</label><input id="network5" ng-model="networks.network5.showIcons" type="checkbox" /><br />
+                <label for="network6">Regional Bus</label><input id="network6" ng-model="networks.network6.showIcons" type="checkbox" /><br />
+                <label for="network7">TeleBus</label><input id="network7" ng-model="networks.network7.showIcons" type="checkbox" /><br />
+                <label for="network8">Night Bus</label><input id="network8" ng-model="networks.network8.showIcons" type="checkbox" /><br />
+                <label for="network10">Interstate</label><input id="network10" ng-model="networks.network10.showIcons" type="checkbox" /><br />
+                <label for="network11">Skybus</label><input id="network11" ng-model="networks.network11.showIcons" type="checkbox" /><br />
+            </div>
+        </div>
+    </body>
+</html>
