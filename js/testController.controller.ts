@@ -1,41 +1,30 @@
 module SwinTransport2 {
     interface NetworkScope extends ng.IScope {
-        networks : {
-            [id: string] : NetworkSettingScope,
-            network1?: NetworkSettingScope,
-            network2?: NetworkSettingScope,
-            network3?: NetworkSettingScope,
-            network4?: NetworkSettingScope,
-            network5?: NetworkSettingScope,
-            network6?: NetworkSettingScope,
-            network7?: NetworkSettingScope,
-            network8?: NetworkSettingScope,
-            network10?: NetworkSettingScope,
-            network11?: NetworkSettingScope,
-        }
+        isMobile: boolean;
+        sidebarOpen: boolean;
+        loading: boolean;
     }
 
     export class TestController implements ng.IController {
-        public static $inject = ["$scope"];
-        constructor($scope:NetworkScope) {
-            $scope.$watch("networks", this.onNetworkChange.bind(this), true);
+        public static $inject = ["$scope", "DeckGLService"];
 
+        public deckService: DeckGLService;
+        constructor($scope:NetworkScope, deckService: DeckGLService) {
+            this.deckService = deckService;
 
-            // Populate checkbox defaults
-            $scope.networks = {};
-            for (let id of [1,2,3,4,5,6,7,8,10,11]) {
-                $scope.networks["network" + id] = {
-                    showLines: true,
-                    showIcons: false
-                }
-            }
-        }
+            $scope.isMobile = window.orientation !== undefined;
+            $scope.sidebarOpen = false;
+            $scope.loading = false;
 
-        public onNetworkChange(newValue:any, oldValue:any) {
-            if (newValue) {
-                settings = newValue;
-                updateLayers();
-            }
+            $scope.$on("DeckGLService::IconClicked", (event, args) => {
+                console.log(event, args);
+            });
+            $scope.$on("cfpLoadingBar:started", (event, args) => {
+                $scope.loading = true;
+            });
+            $scope.$on("cfpLoadingBar:completed", (event, args) => {
+                $scope.loading = false;
+            });
         }
     }
 }

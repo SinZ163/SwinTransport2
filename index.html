@@ -4,6 +4,15 @@
         <link rel="manifest" href="manifest.json">
 
         <script src="https://d3js.org/d3.v5.min.js" defer="defer"></script>
+        <link rel="stylesheet" href="css/fontawesome.min.css">
+        <link rel="stylesheet" href="css/fa-solid.min.css">
+
+        <!-- Bootstrap-->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+        <!-- End Bootstrap-->
 
         <!-- Deck GL -->
         <script src="https://unpkg.com/deck.gl@latest/deckgl.min.js" defer="defer"></script>
@@ -13,16 +22,31 @@
         <!-- Angular JS-->
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js" defer="defer"></script>
         <script src="https://code.angularjs.org/1.6.9/angular-route.js" defer="defer"></script>
+
+        <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.css' type='text/css' media='all' />
+        <script type='text/javascript' src='//cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.9.0/loading-bar.min.js' defer="defer"></script>
         <!-- End Angular JS-->
 
         <!-- Start Self -->
-        <script src='js/main.js' defer="defer"></script>
         <script src='js/SwinTransport2.module.js' defer="defer"></script>
+        <script src='js/DeckGL.service.js' defer="defer"></script>
         <script src='js/testController.controller.js' defer="defer"></script>
+        <script src='js/sidebar.component.js' defer="defer"></script>
         <!-- End Self-->
         <style>
-            body { margin:0; padding:0; }
-            #map { position:absolute; top:0; bottom:0; width:100%; }
+            body { margin:0; padding:0; overflow-x: hidden;}
+            .wrapper::-webkit-scrollbar { 
+                display: none;
+            }
+            #map {
+                position:absolute;
+                top:0;
+                bottom:0;
+                left: 0;
+                width:100%;
+
+                transition: width 0.2s;
+            }
             #test {
                 position: absolute;
                 top: 50px;
@@ -55,6 +79,7 @@
 
             /* Allow them to scroll down the document */
             overflow-y: hidden;
+            overflow-x: hidden;
             }
 
             .body {
@@ -66,23 +91,63 @@
             /* Making the wrapper stack above the body */
             z-index: 2;
             }
+            sidebar {
+                background-color: #555;
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                left: 0;
+                visibility: hidden;
+                height: 100%;
+                width: 0%;
+                transition: width 0.2s;
+                z-index: 3;
+            }
+            .sidebar sidebar {
+                visibility: visible;
+                width: 200px;
+            }
+
+            #sidebar-hamburger {
+                position: relative;
+                top: 0;
+                left: 0;
+
+                z-index: 3;
+                transition: top 0.2s;
+
+                color: white;
+                font-size: 30pt;
+            }
+            .sidebar #sidebar-hamburger {
+                left: 200px;
+            }
+            /* If the loading bar is currently showing, move down slightly */
+            .loading #sidebar-hamburger {
+                top: 25px;
+            }
+            /* If we moved to the side, we can show with less displacement */
+            .loading.sidebar #sidebar-hamburger {
+                top: 3px;
+            }
+            .loading #loading-blocker {
+                height: 25px;
+                width: 100%;
+            }
+
+            fieldset legend {
+                font-size: initial;
+                font-weight: bolder;
+            }
         </style>
     </head>
-    </head>
-    <body class="body">
-        <div class="wrapper">
-            <div id="map"></div>
-            <div id="test" ng-controller="testController">
-                <label for="network1">Regional Train</label><input id="network1" ng-model="networks.network1.showIcons" type="checkbox" /><br />
-                <label for="network2">Metropolitan Train</label><input id="network2" ng-model="networks.network2.showIcons" type="checkbox" /><br />
-                <label for="network3">Metropolitan Tram</label><input id="network3" ng-model="networks.network3.showIcons" type="checkbox" /><br />
-                <label for="network4">Metropolitan Bus</label><input id="network4" ng-model="networks.network4.showIcons" type="checkbox" /><br />
-                <label for="network5">Regional Coach</label><input id="network5" ng-model="networks.network5.showIcons" type="checkbox" /><br />
-                <label for="network6">Regional Bus</label><input id="network6" ng-model="networks.network6.showIcons" type="checkbox" /><br />
-                <label for="network7">TeleBus</label><input id="network7" ng-model="networks.network7.showIcons" type="checkbox" /><br />
-                <label for="network8">Night Bus</label><input id="network8" ng-model="networks.network8.showIcons" type="checkbox" /><br />
-                <label for="network10">Interstate</label><input id="network10" ng-model="networks.network10.showIcons" type="checkbox" /><br />
-                <label for="network11">Skybus</label><input id="network11" ng-model="networks.network11.showIcons" type="checkbox" /><br />
+    <body class="body" ng-controller="testController">
+        <div class="wrapper" ng-class="{'sidebar': sidebarOpen, 'loading': loading}">
+            <sidebar id="sidebar" networks="{{networks}}"></sidebar>
+            <div id="sidebar-hamburger">
+                <i class="fas fa-bars" ng-click="sidebarOpen = !sidebarOpen"  aria-expanded="{{sidebarOpen}}" aria-controls="sidebar"></i>
+            </div>
+            <div id="map">
             </div>
         </div>
     </body>
